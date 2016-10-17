@@ -78,7 +78,7 @@ defmodule RethinkDB.Ecto do
       secs = trunc(timestamp)
       usec = trunc((timestamp - secs) * 1_000_000)
       {date, {hour, min, sec}} = :calendar.gregorian_seconds_to_datetime(secs + epoch)
-      {:ok, Ecto.DateTime.load {date, {hour, min, sec, usec}}}
+      Ecto.DateTime.load {date, {hour, min, sec, usec}}
     end]
   end
 

@@ -113,21 +113,21 @@ defmodule RethinkDB.EctoTest do
     TestRepo.delete!(user)
   end
 
-  # test "timestamps and datetime fields" do
-  #   user = TestRepo.insert!(%User{name: "Hugo", age: 20}) 
-  #   assert user.inserted_at
-  #   assert user.inserted_at == user.updated_at
+  test "timestamps and datetime fields" do
+    user = TestRepo.insert!(%User{name: "Hugo", age: 20}) 
+    assert user.inserted_at
+    assert user.inserted_at == user.updated_at
 
-  #   now = Ecto.DateTime.utc
-  #   update_user = TestRepo.update!(Ecto.Changeset.cast(user, %{datetime: now}, ~w(datetime), ~w()))
-  #   assert update_user.datetime == now
+    now = Ecto.DateTime.utc
+    update_user = TestRepo.update!(Ecto.Changeset.cast(user, %{datetime: now}, ~w(datetime), ~w()))
+    assert update_user.datetime == now
     
-  #   load_user = TestRepo.get!(User, user.id)
-  #   assert load_user.inserted_at
-  #   assert load_user.datetime == now
+    load_user = TestRepo.get!(User, user.id)
+    assert load_user.inserted_at
+    assert load_user.datetime == now
     
-  #   TestRepo.delete!(user)
-  # end
+    TestRepo.delete!(user)
+  end
 
   test "insert, update and delete user" do
     user_params = %{name: "Mario", age: 26, in_relationship: true}
