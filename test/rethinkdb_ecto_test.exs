@@ -89,13 +89,13 @@ defmodule RethinkDB.EctoTest do
       |> Enum.all?(&(&1.name in names))
   end
 
-  # test "fetches all and select id and name only" do
-  #   users = TestRepo.all(from u in User, select: [u.id, u.name])
-  #   names = Enum.map(@users, &Map.get(&1, :name))
+  test "fetches all and select id and name only" do
+    users = TestRepo.all(from u in User, select: [u.id, u.name])
+    names = Enum.map(@users, &Map.get(&1, :name))
 
-  #   assert length(users) == length(@users)
-  #   for [_id, name] <- users, do: assert name in names
-  # end
+    assert length(users) == length(@users)
+    for [_id, name] <- users, do: assert name in names
+  end
 
   test "counts users" do
     [count] = TestRepo.all(from u in User, select: count(u.id))

@@ -246,15 +246,20 @@ defmodule RethinkDB.Ecto do
   end
 
   defp process_record(record, process, ast) do
-    Enum.map(ast, fn
-      {:&, _, [_, fields, _]} = expr ->
-        data =
-          fields
-          |> Enum.map(&Atom.to_string/1)
-          |> Enum.map(&Map.get(record, &1))
-        process.(expr, data, nil)
+    case record do
+      %{} -> 
+        Enum.map(ast, fn
+          {:&, _, [_, fields, _]} = expr ->
+            data =
+              fields
+              |> Enum.map(&Atom.to_string/1)
+              |> Enum.map(&Map.get(record, &1))
+            process.(expr, data, nil)
+        end)
+      expr when is_list(record)-> 
+        record
       expr ->
-        process.(expr, record, nil)
-    end)
+        [record]
+    end
   end
 end
