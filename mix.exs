@@ -9,6 +9,7 @@ defmodule RethinkDB.Ecto.Mixfile do
      version: @version,
      elixir: "~> 1.3",
      package: package,
+     source_url: "https://github.com/almightycouch/rethinkdb_ecto",
      description: description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -43,6 +44,5 @@ defmodule RethinkDB.Ecto.Mixfile do
      {:rethinkdb, github: "almightycouch/rethinkdb-elixir"},
      {:ex_doc, "~> 0.12", only: :dev},
      {:earmark, ">= 0.0.0", only: :dev}]
-
   end
 end
