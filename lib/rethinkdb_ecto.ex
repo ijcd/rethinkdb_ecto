@@ -211,10 +211,13 @@ defmodule RethinkDB.Ecto do
 
   defp run(query, repo, {func, fields}, process) do
     case RethinkDB.run(query, repo.__pool__) do
+      # process results of many rows
       {:ok, %{data: data}} when is_list(data) ->
         {records, count} = Enum.map_reduce(data, 0, &{process_record(&1, process, fields), &2 + 1})
         {count, records}
-      {:ok, %{data: data}} ->
+
+      # process inserts, updates, etc, that do not have return data
+      {:ok, %{data: %{} = data}} ->
         case func do
           :insert_all ->
             {data["inserted"], nil}
@@ -227,6 +230,12 @@ defmodule RethinkDB.Ecto do
             new_fields = Keyword.merge(new_fields, fields)
             {:ok, new_fields}
         end
+
+      # process aggregations, etc, that return a single value
+      {:ok, %{data: data}} ->
+        {1, [process_record(data, process, fields)]}
+
+      # process errors
       {:error, %{data: %{"r" => [error|_]}}} ->
         {:invalid, [error: error]}
     end

@@ -97,15 +97,15 @@ defmodule RethinkDB.EctoTest do
   #   for [_id, name] <- users, do: assert name in names
   # end
 
-  # test "counts users" do
-  #   [count] = TestRepo.all(from u in User, select: count(u.id))
-  #   assert count == 4
-  # end
+  test "counts users" do
+    [count] = TestRepo.all(from u in User, select: count(u.id))
+    assert count == 4
+  end
 
-  # test "computes average of all users age " do
-  #   [avg] = TestRepo.all(from u in User, select: avg(u.age))
-  #   assert avg == 25
-  # end
+  test "computes average of all users age " do
+    [avg] = TestRepo.all(from u in User, select: avg(u.age))
+    assert avg == 25
+  end
 
   test "insert without all fields" do
     user = TestRepo.insert!(%User{name: "Hugo", age: 20})
