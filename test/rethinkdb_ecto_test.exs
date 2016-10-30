@@ -123,6 +123,11 @@ defmodule RethinkDBEctoTest do
     assert users == TestRepo.all(from u in User, select: %{name: u.name, age: u.age}, order_by: [desc: u.age])
   end
 
+  test "select name and age from each user as list" do
+    users = Enum.map(insert_factory!(User), &Map.take(&1, [:name, :age]))
+    assert [["Mario", 26], ["Felix", 25], ["Roman", 24]] == TestRepo.all(from u in User, select: [u.name, u.age], order_by: [desc: u.age])
+  end
+  
   test "select distinct user relationships" do
     insert_factory!(User)
     [false, true] = TestRepo.all(from u in User, distinct: true, select: u.in_relationship)
