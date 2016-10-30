@@ -1,5 +1,6 @@
 defmodule RethinkDBEctoTest do
   use ExUnit.Case
+  doctest RethinkDB.Ecto
 
   import Ecto.Query
 
@@ -20,6 +21,7 @@ defmodule RethinkDBEctoTest do
       field :name, :string
       field :age, :integer
       field :in_relationship, :boolean
+      field :datetime, Ecto.DateTime
       has_many :posts, RethinkDBEctoTest.Post
       timestamps
     end
@@ -198,6 +200,22 @@ defmodule RethinkDBEctoTest do
     from(p in Post, preload: :author)
     |> TestRepo.all()
     |> Enum.each(&assert &1 in posts)
+  end
+
+  test "timestamps and datetime fields" do
+    user = TestRepo.insert!(%User{name: "Hugo", age: 20}) 
+    assert user.inserted_at
+    assert user.inserted_at == user.updated_at
+
+    now = Ecto.DateTime.utc
+    update_user = TestRepo.update!(Ecto.Changeset.cast(user, %{datetime: now}, ~w(datetime), ~w()))
+    assert update_user.datetime == now
+    
+    load_user = TestRepo.get!(User, user.id)
+    assert load_user.inserted_at
+    assert load_user.datetime == now
+    
+    TestRepo.delete!(user)
   end
 
   #
