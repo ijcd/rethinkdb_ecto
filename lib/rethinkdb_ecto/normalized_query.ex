@@ -188,6 +188,8 @@ defmodule RethinkDB.Ecto.NormalizedQuery do
     ReQL.map(reql, &selectize(reql, &1, groups, evaluate_arg(expr, params), params))
   end
 
+  defp select(reql, _query, _params), do: reql
+
   #
   # DISTINCT
   #
